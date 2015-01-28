@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="network">
+    <xs:complexType>
+      <xs:sequence>
+        <!-- The "name" element is the name of the network. They should have friendly names that can be referred to if it ever goes up for sale, rent, swap, donate, or promulgate.-->
+        <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        <!-- The "id" element is optional and can be the pkid if the values of this network are stored in an SQL (or NOSQL) database, to be called out and assembled into a network on an ad hoc basis-->
+        <xs:element name="id" type="xs:integer" minOccurs="0" maxOccurs="1"/>
+        <!-- The "revision" element is for configuration control-->
+        <xs:element name="revision" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        <!-- The "revision_history" is optional and is an element to describe changes to the network -->
+        <xs:element name="revision_history" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <!-- The "classification element" is put in for later use. Someone will come up with a classification algorithm for types of neural nets.There is room for a multiplicity of classifications-->
+        <xs:element name="classification" type="xs:string" minOccurs="0" maxOccurs="0"/>
+        <!-- The "region" element is optional and will be important if the networks are chained together, and the neurons have different functions than a standard neuron, like an accumulator or a probability computer
+        and are grouped by region, disk, server, cloud, partition, etc-->
+        <xs:element name="region" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <!-- The "description" element is an optional field, however a very useful one.-->
+        <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <!-- The "creator" element is optional and denotes who trained these nets -->
+        <xs:element name="creator" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <!-- The "notes" element is optional and is self explanatory-->
+        <xs:element name="notes" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <!-- The source element defines the origin of the data. It could be a URL -->
+        <xs:element name="dataset_source" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <!-- This optional element, together with the source data helps to recreate this network should it go wonky -->
+        <xs:element name="number_of_training_epochs" type="xs:integer" minOccurs="0" maxOccurs="1"/>
+        <!-- The "number_of_layers" defines the total-->
+        <xs:element name="number_of_layers" type="xs:integer" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="layers">
+          <xs:complexType>
+            <xs:sequence>
+              <!-- Repeat as necessary for number of layers-->
+              <xs:element name="layer" type="xs:string" minOccurs="1" maxOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <!-- Layer Naming and Neuron Naming will ultimately have a recognized convention eg. L2-N1 is Layer 2, Neuron #1-->
+                    <xs:element name="layer_name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                    <!-- number of neurons is for the benefit of an object-oriented constructor-->
+                    <xs:element name="number_of_neurons" type="xs:integer" minOccurs="1" maxOccurs="1"/>
+                    <!-- defining the neuron this is repeated as many times as necessary-->
+                    <xs:element name="neuron">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <!--optional ~  currently it could be a perceptron, but it could also be a new type, like an accumulator, or probability calculator-->
+                          <xs:element name="type" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                          <!-- name is optional ~ name will be standardized eg. L1-N1 layer/neuron pair. The reason is that there might be benefit in synaptic joining of this layer to other networks and one must define the joins -->
+                          <xs:element name="name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                          <!-- optional ~ again, someone will come up with a classification system-->
+                          <xs:element name="neuron_classification" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                          <!-- number of inputs-->
+                          <xs:element name="number_of_inputs" type="xs:integer" minOccurs="1" maxOccurs="1"/>
+                          <!-- required if the input layer is also an output layer - eg. sigmoid, heaviside etc-->
+                          <xs:element name="primary_activation_function_name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                          <!-- ~ optional - there is no such thing as a xs:function - yet, but there could be in the future -->
+                          <xs:element name="primary_activation_function" type="xs:function" minOccurs="0" maxOccurs="1"/>
+                          <!-- in lieu of an embeddable function, a description could go here ~ optional -->
+                          <xs:element name="primary_activation_function_description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                          <!-- possible alternate activation functions eg. sigmoid, heaviside etc-->
+                          <xs:element name="alternate_activation_function_name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                          <!-- ~ optional - there is no such thing as a xs:function - yet, but there could be in the future -->
+                          <xs:element name="alternate__activation_function" type="xs:function" minOccurs="0" maxOccurs="1"/>
+                          <!-- in lieu of an embeddable function, a description could go here ~ optional -->
+                          <xs:element name="alternate__activation_function_description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                          <!-- if this is an output layer or requires an activation threshold-->
+                          <xs:element name="activation_threshold" type="xs:double" minOccurs="1" maxOccurs="1"/>
+                          <xs:element name="learning_rate" type="xs:double" minOccurs="1" maxOccurs="1"/>
+                          <!-- the alpha or the 'movement' is used in the back propagation formula to calculate new weights-->
+                          <xs:element name="alpha" type="xs:double" minOccurs="1" maxOccurs="1"/>
+                          <!-- the local gradient is used in back propagation-->
+                          <xs:element name="local_gradient" type="xs:double" minOccurs="1" maxOccurs="1"/>
+                          <!-- inputs as many as needed-->
+                          <xs:element name="input">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <!-- Inputs optionally named in case order is necessary for definition -->
+                                <xs:element name="input_name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                                <!-- use appropriate type-->
+                                <xs:element name="input_value_double" type="xs:double" minOccurs="0" maxOccurs="unbounded"/>
+                                <!-- use appropriate type-->
+                                <xs:element name="input_value_integer" type="xs:integer" minOccurs="0" maxOccurs="unbounded"/>
+                                <!-- weight for this input-->
+                                <xs:element name="input_value_weight" type="xs:double" minOccurs="1" maxOccurs="1"/>
+                                <!-- added as a convenince for continuation of back propagation if the network is relocated, moved, cloned, etc-->
+                                <xs:element name="input_value_previous_weight" type="xs:double" minOccurs="1" maxOccurs="1"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <!-- end of input-->
+                          <!-- bias-->
+                          <xs:element name="bias">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="bias_value" type="xs:double" minOccurs="1" maxOccurs="1"/>
+                                <xs:element name="bias_value_weight" type="xs:double" minOccurs="1" maxOccurs="1"/>
+                                <!-- added as a convenince for continuation of back propagation if the network is relocated, moved, cloned, etc-->
+                                <xs:element name="bias_value_previous_weight" type="xs:double" minOccurs="1" maxOccurs="1"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <!-- end of bias-->
+                          <xs:element name="output">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <!-- outputs optionally named in case order is necessary for definition -->
+                                <xs:element name="output_name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                                <xs:element name="output_value_double" type="xs:double" minOccurs="0" maxOccurs="unbounded"/>
+                                <!-- hypothetical value is a description of what it means if the neuron activates and fires as output if this is the last layer-->
+                                <xs:element name="hypothetical_value" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <!-- end of output-->
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <!-- end of neuron-->
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <!-- end of layer-->
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!-- end of layers-->
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- network-->
+</xs:schema>
